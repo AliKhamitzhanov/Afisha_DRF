@@ -14,15 +14,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from movie_app.views import *
+from . import swagger
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/directors/', director_view),
-    path('api/v1/directors/<int:id>/', director_detail_view),
-    path('api/v1/movies/', movie_view),
-    path('api/v1/movies/<int:id>/', movie_detail_view),
-    path('api/v1/reviews/', review_view),
-    path('api/v1/reviews/<int:id>/', review_detail_view)
+    path('api/v1/directors/', DirectorListCreateAPIView.as_view()),
+    path('api/v1/directors/<int:pk>/', DirectorRetrieveUpdateDestroyAPIView.as_view()),
+    path('api/v1/movies/', MovieListCreateAPIView.as_view()),
+    path('api/v1/movies/<int:pk>/', MovieRetrieveUpdateDestroyAPIView.as_view()),
+    path('api/v1/reviews/', ReviewListCreateAPIView.as_view()),
+    path('api/v1/reviews/<int:pk>/', ReviewRetrieveUpdateDestroyAPIView.as_view()),
+    path('api/v1/movies/reviews/', MoviesReviewListAPIView.as_view()),
+    path('api/v1/user/', include('user.urls'))
+    # path('api/v1/directors/', director_view),
+    # path('api/v1/directors/<int:id>/', director_detail_view),
+    # path('api/v1/movies/', movie_view),
+    # path('api/v1/movies/<int:id>/', movie_detail_view),
+    # path('api/v1/reviews/', review_view),
+    # path('api/v1/reviews/<int:id>/', review_detail_view)
 ]
+urlpatterns += swagger.urlpatterns
